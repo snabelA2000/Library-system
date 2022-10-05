@@ -2,10 +2,10 @@ import { useEffect, useState, useContext } from "react";
 
 
 
-export const Home = () => {
+export default function Home() {
     return (
-        <>
-            <div>Hello World</div>
-        </>
+
+        <div>Hello HOME</div>
+
     )
 }
