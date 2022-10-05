@@ -1,4 +1,4 @@
-package com.libraryApplication.configs;
+package com.libraryApplication.dialects;
 
 import java.sql.Types;
 
@@ -6,11 +6,10 @@ import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.function.StandardSQLFunction;
 import org.hibernate.dialect.function.SQLFunctionTemplate;
 import org.hibernate.dialect.function.VarArgsSQLFunction;
-import org.hibernate.Hibernate;
 import org.hibernate.type.StringType;
 
-public class SQLDialect extends Dialect {
-    public SQLDialect() {
+public class SQLiteDialect extends Dialect {
+    public SQLiteDialect() {
         registerColumnType(Types.BIT, "integer");
         registerColumnType(Types.TINYINT, "tinyint");
         registerColumnType(Types.SMALLINT, "smallint");
