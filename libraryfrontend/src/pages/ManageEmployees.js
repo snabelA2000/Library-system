@@ -1,25 +1,23 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useState } from "react";
 
-import {EmployeeContext} from "../contextProviders/EmployeeContextProvider"
 import { EmployeeListing } from "../components/lists/EmployeeListing"
 
 export const ManageEmployees = () => {
 
-    const { allEmployees, fetchAllEmployees } = useContext(EmployeeContext);
+    const [employees, setEmployees] = useState([])
 
     useEffect(() => {
-        const x = setTimeout(() => {
-            fetchAllEmployees();
-        }, 500);
-        return () => {
-          clearTimeout(x);
-        };
-      }, []);
-
+        fetch("http://localhost:4000/rest/employee/all")
+            .then(res => res.json())
+            .then((result) => {
+                console.log("result", result)
+                setEmployees(result);
+            })
+    }, [])
 
     return (
         <div>
-            <EmployeeListing allEmployees={allEmployees} />
+            <EmployeeListing employees={employees} />
         </div>
     )
 }

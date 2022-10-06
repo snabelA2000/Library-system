@@ -32,7 +32,25 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+.navbar {
+  background-color: chocolate;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  list-style-type: none;
+  margin: 0;
+  padding: 0px;
+}
+
+.navbar * {
+  padding: 20px;
+  text-decoration: none;
+  color: white;
 }

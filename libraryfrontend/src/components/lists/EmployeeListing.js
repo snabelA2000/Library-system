@@ -1,14 +1,14 @@
 
-import "../../styling/components"
+import "../../styling/components.css"
 import { EmployeeCard } from "../cards/EmployeeCard";
 
-export const EmployeeListing = ({ items }) => {
+export const EmployeeListing = ({ employees }) => {
 
-    const renderItems = items.map((item) => {
+    const renderItems = employees.map((e) => {
         return (
             <EmployeeCard
-                auction={item}
-                key={item.id}
+                employee={e}
+                key={e.id}
             />
         )
     })

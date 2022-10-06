@@ -1,8 +1,6 @@
 package com.libraryApplication.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
@@ -10,8 +8,10 @@ public class LibraryItem {
 
     @Id
     @GeneratedValue
-    private long id;
-    private Integer categoryId;
+    private int id;
+    @ManyToOne
+    @JoinColumn(name="category_id", nullable = false)
+    private Category category;
     private String title;
     private String author;
     private Integer pages;
@@ -24,20 +24,20 @@ public class LibraryItem {
     public LibraryItem() {
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public Integer getCategoryId() {
-        return categoryId;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public String getTitle() {
@@ -108,7 +108,7 @@ public class LibraryItem {
     public String toString() {
         return "LibraryItem{" +
                 "id=" + id +
-                ", categoryId=" + categoryId +
+                ", category=" + category +
                 ", title='" + title + '\'' +
                 ", author='" + author + '\'' +
                 ", pages=" + pages +
