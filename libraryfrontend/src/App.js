@@ -1,24 +1,27 @@
-import logo from './logo.svg';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import './App.css';
+
+import { Navbar } from './components/Navbar'
+
+import { Home } from './pages/Home'
+import { ManageEmployees } from "./pages/ManageEmployees";
+import { CreateEmployee} from "./pages/CreateEmployee"
+import { NotFound404 } from "./pages/NotFound404";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="app-container">
+        <Navbar />
+        <Routes>
+          <Route exact path="/" element={<Home />} />
+          <Route exact path="/manageEmployees" element={<ManageEmployees />} />
+          <Route exact path="/manageEmployees/createEmployee" element={<CreateEmployee/>} />
+          <Route path="*" element={<NotFound404 />} />
+        </Routes>
+      </div>
+    </Router>
+
   );
 }
 

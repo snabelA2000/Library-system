@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("rest/employee")
+@CrossOrigin
 public class EmployeeController {
 
     @Autowired
@@ -21,23 +23,23 @@ public class EmployeeController {
 
     //endpoints
 
-    @RequestMapping(value = "readEmployees", method = RequestMethod.GET)
+    @RequestMapping(value = "", method = RequestMethod.GET)
     public List<Employee> readStudents(){
         return employeeService.readEmployees();
     }
 
-    @RequestMapping(value = "createEmployee", method = RequestMethod.POST)
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String createEmployee(@RequestBody Employee employee){
         System.out.println("Requestbody employee: " + employee);
         return employeeService.createEmployee(employee);
     }
 
-    @RequestMapping(value = "updateEmployee", method = RequestMethod.PUT)
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public String updateEmployee(@RequestBody Employee employee){
         return employeeService.updateEmployee(employee);
     }
 
-    @RequestMapping(value = "deleteEmployee", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public String deleteEmployee(@RequestBody Employee employee){
         return employeeService.deleteEmployee(employee);
     }
