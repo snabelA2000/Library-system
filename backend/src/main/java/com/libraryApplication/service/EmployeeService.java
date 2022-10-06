@@ -19,15 +19,16 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public Optional<Employee> getById(long id) {
+    public Optional<Employee> getById(int id) {
         return employeeRepository.findById(id);
     }
 
     @Transactional
     public String createEmployee(Employee employee){
         try {
-            if (!employeeRepository.existsById(employee.getId())){
-                employee.setId((long) (null == employeeRepository.findMaxId()? 0 : employeeRepository.findMaxId() + 1));
+            if (!employeeRepository.existsByLastName(employee.getLastName())){
+                employee.setId(null == employeeRepository.findMaxId()? 0 : employeeRepository.findMaxId() + 1);
+                System.out.println("-----service createEmployee: " + employee);
                 employeeRepository.save(employee);
                 return "Employee record created successfully.";
             }else {
@@ -44,11 +45,11 @@ public class EmployeeService {
 
     @Transactional
     public String updateEmployee(Employee employee){
-        if (employeeRepository.existsByEmployeeId(employee.getId())){
+        if (employeeRepository.existsByLastName(employee.getLastName())){
             try {
-                List<Employee> employees = employeeRepository.findByEmployeeId(employee.getId());
-                employees.stream().forEach(e -> {
-                    Employee employeeToBeUpdate = (Employee) employeeRepository.findByEmployeeId(e.getId());
+                List<Employee> employees = employeeRepository.findByLastName(employee.getLastName());
+                employees.stream().forEach(s -> {
+                    Employee employeeToBeUpdate = employeeRepository.findById(s.getId()).get();
                     employeeToBeUpdate.setFirstName(employee.getFirstName());
                     employeeToBeUpdate.setLastName(employee.getLastName());
                     employeeRepository.save(employeeToBeUpdate);
@@ -64,15 +65,15 @@ public class EmployeeService {
 
     @Transactional
     public String deleteEmployee(Employee employee){
-        if (employeeRepository.existsByEmployeeId(employee.getId())){
+        if (employeeRepository.existsByLastName(employee.getLastName())){
             try {
-                List<Employee> employees = employeeRepository.findByEmployeeId(employee.getId());
-                employees.stream().forEach(e -> {
-                    employeeRepository.delete(e);
+                List<Employee> employees = employeeRepository.findByLastName(employee.getLastName());
+                employees.stream().forEach(s -> {
+                    employeeRepository.delete(s);
                 });
                 return "Employee record deleted successfully.";
-            }catch (Exception ex){
-                throw ex;
+            }catch (Exception e){
+                throw e;
             }
 
         }else {

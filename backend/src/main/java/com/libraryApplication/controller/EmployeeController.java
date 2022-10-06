@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("rest/employee")
 public class EmployeeController {
 
     @Autowired
@@ -21,18 +20,15 @@ public class EmployeeController {
     }
 
     //endpoints
-    @GetMapping
-    public List<Employee> getAllEmployees() {
-        return employeeService.getAllEmployees();
+
+    @RequestMapping(value = "readEmployees", method = RequestMethod.GET)
+    public List<Employee> readStudents(){
+        return employeeService.readEmployees();
     }
 
-    @GetMapping("/{id}")
-    public Optional<Employee> getEmployeeById(@PathVariable long id) {
-        return employeeService.getById(id);
-    }
-
-    @PostMapping
-    public String createEmployee(@RequestBody Employee employee) {
+    @RequestMapping(value = "createEmployee", method = RequestMethod.POST)
+    public String createEmployee(@RequestBody Employee employee){
+        System.out.println("Requestbody employee: " + employee);
         return employeeService.createEmployee(employee);
     }
 

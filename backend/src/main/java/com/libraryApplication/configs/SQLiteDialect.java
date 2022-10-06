@@ -1,4 +1,4 @@
-package com.libraryApplication.dialects;
+package com.libraryApplication.configs;
 
 import java.sql.Types;
 

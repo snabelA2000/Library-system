@@ -10,7 +10,7 @@ public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
     private String firstName;
     private String lastName;
     private Integer salary;
@@ -21,11 +21,11 @@ public class Employee {
     public Employee() {
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -75,18 +75,5 @@ public class Employee {
 
     public void setManagerId(Integer managerId) {
         this.managerId = managerId;
-    }
-
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", salary=" + salary +
-                ", isCEO=" + isCEO +
-                ", isManager=" + isManager +
-                ", managerId=" + managerId +
-                '}';
     }
 }

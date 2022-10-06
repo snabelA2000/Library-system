@@ -8,12 +8,13 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
-    public boolean existsByEmployeeId(long id);
+    public boolean existsByLastName(String lastName);
 
-    public List<Employee> findByEmployeeId(Long id);
+    public List<Employee> findByLastName(String lastName);
 
     @Query("SELECT max(e.id) from Employee e")
     public Integer findMaxId();
+
 }
