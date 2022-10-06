@@ -24,7 +24,7 @@ public class EmployeeController {
     //endpoints
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public List<Employee> readStudents(){
+    public List<Employee> readEmployees(){
         return employeeService.readEmployees();
     }
 
