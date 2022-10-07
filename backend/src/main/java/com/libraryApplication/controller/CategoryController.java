@@ -29,8 +29,8 @@ public class CategoryController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String createCategory(@RequestBody Category category){
-        System.out.println("Requestbody category: " + category);
+    public Category createCategory(@RequestBody Category category){
+        System.out.println("------Requestbody category: " + category);
         return categoryService.createCategory(category);
     }
 

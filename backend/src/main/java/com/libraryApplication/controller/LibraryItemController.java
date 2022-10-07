@@ -28,7 +28,7 @@ public class LibraryItemController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String createLibraryItem(@RequestBody LibraryItem libraryItem){
+    public LibraryItem createLibraryItem(@RequestBody LibraryItem libraryItem){
         System.out.println("Requestbody libraryItem: " + libraryItem);
         return libraryItemService.createLibraryItem(libraryItem);
     }

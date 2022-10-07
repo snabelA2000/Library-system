@@ -1,5 +1,6 @@
 package com.libraryApplication.service;
 
+import com.libraryApplication.entity.Category;
 import com.libraryApplication.entity.LibraryItem;
 import com.libraryApplication.repository.LibraryItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,20 +24,26 @@ public class LibraryItemService {
         return libraryItemRepository.findById(id);
     }
 
+    /*
     @Transactional
-    public String createLibraryItem(LibraryItem libraryItem){
+    public LibraryItem createLibraryItem(LibraryItem libraryItem){
         try {
             if (!libraryItemRepository.existsByTitle(libraryItem.getTitle())){
                 libraryItem.setId(null == libraryItemRepository.findMaxId()? 0 : libraryItemRepository.findMaxId() + 1);
                 System.out.println("-----service createLibraryItem: " + libraryItem);
                 libraryItemRepository.save(libraryItem);
-                return "LibraryItem record created successfully.";
+                return libraryItem;
             }else {
-                return "LibraryItem already exists in the database.";
+                return libraryItem;
             }
         }catch (Exception e){
             throw e;
         }
+    }
+    */
+
+    public LibraryItem createLibraryItem(LibraryItem libraryItem) {
+        return libraryItemRepository.save(libraryItem);
     }
 
     public List<LibraryItem> readLibraryItems(){

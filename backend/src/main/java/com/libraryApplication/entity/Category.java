@@ -1,5 +1,7 @@
 package com.libraryApplication.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -10,6 +12,7 @@ public class Category {
     @GeneratedValue
     private int id;
     private String categoryName;
+    @JsonManagedReference
     @OneToMany(mappedBy="category")
     private Set<LibraryItem> libraryItems;
 

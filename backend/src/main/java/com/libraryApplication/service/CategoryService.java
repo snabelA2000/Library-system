@@ -23,6 +23,7 @@ public class CategoryService {
         return categoryRepository.findById(id);
     }
 
+    /*
     @Transactional
     public String createCategory(Category category){
         try {
@@ -37,6 +38,11 @@ public class CategoryService {
         }catch (Exception e){
             throw e;
         }
+    }
+    */
+
+    public Category createCategory(Category category) {
+        return categoryRepository.save(category);
     }
 
     public List<Category> readCategories(){

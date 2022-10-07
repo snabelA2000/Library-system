@@ -1,5 +1,7 @@
 package com.libraryApplication.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -9,6 +11,7 @@ public class LibraryItem {
     @Id
     @GeneratedValue
     private int id;
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name="category_id", nullable = false)
     private Category category;
