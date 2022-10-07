@@ -16,5 +16,15 @@
 }
 
 .cardContainer {
+    display: flex;
+    justify-content: space-between;
     padding: 16px;
+}
+
+.cardContainer > div > div {
+    display: flex;
+}
+
+.cardContainer > div > div > * {
+    padding: 4px;
 }

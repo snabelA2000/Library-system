@@ -13,7 +13,7 @@ public class LibraryItem {
     private int id;
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name="category_id", nullable = false)
+    @JoinColumn(name="category_id")
     private Category category;
     private String title;
     private String author;

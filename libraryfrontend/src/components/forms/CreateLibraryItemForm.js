@@ -1,81 +1,123 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-export default function CreateLibraryItemForm() {
+export default function CreateLibraryItemForm({ categories }) {
 
     const navigate = useNavigate()
 
     //dynamically gathers input values into an object which will be passed on submit
     const [itemData, setItemData] = useState({
         type: "",
-        category: "",
         title: "",
         author: "",
-        pages: "",
-        runTimeMinutes: "",
+        pages: null,
+        runTimeMinutes: null,
+        categoryName: ""
     });
 
-      // TEMP categories
-      const categories = [
-        { id: 1, name: "Choose", value: "" },
-        { id: 2, name: "Fiction", value: "Fiction" },
-        { id: 3, name: "Fantasy", value: "Fantasy" },
-        { id: 4, name: "Horror", value: "Horror" },
-        { id: 5, name: "Non-fiction", value: "Non-fiction" }
-    ]
+    console.log(itemData)
 
-    const handleFormSubmit = async (e, value) => {
 
-        console.log(e.target.value)
+    const handleSubmit = async (e) => {
+
         e.preventDefault()
 
         let item = itemData;
 
-        let catId = "";
-        categories.forEach((item) => {
-            if (item.category === item.name) {
-                catId = item.id
-                return;
-            }
-        })
+        let catId = ""
+
+        console.log(categories.some(obj => item.categoryName === obj.categoryName))
+
+        if (categories.some(obj => item.categoryName === obj.categoryName)) {
+            categories.forEach((obj) => { //get the id of the chosen category
+                if (item.categoryName === obj.categoryName) {
+                    console.log("--------foreach categorie: ", item.categoryName, obj.categoryName)
+                    catId = obj.id
+                    return;
+                }
+            });
+        } else {
+            let newCat = createNewCategory(item.categoryName)
+            catId = newCat.id
+        }
+
+
+
+        console.log("----catId: ", catId)
+
 
         //POST object
         let newLibraryItem = {
+            title: item.title,
             author: item.author,
+            pages: item.pages,
+            category: {
+                id: catId,
+                categoryName: item.categoryName,
+            },
+            isBorrowable: true,
             borrowDate: null,
             borrower: null,
-            categoryId: catId,
-            isBorrowable: true,
-            pages: item.pages,
             runTimeMinutes: item.runTimeMinutes,
-            title: item.title,
             type: item.type
         }
 
+        console.log("jsonobject: ", JSON.stringify(newLibraryItem))
+
+
+
         try {
-            let res = await fetch("/rest/libraryItem", {
+            let res = await fetch("http://localhost:4000/rest/libraryItem/add", {
                 method: "POST",
                 headers: { "content-type": "application/json" },
                 body: JSON.stringify(newLibraryItem)
             });
             res = await res.json();
-
-            navigate.push(`/item-details/${res.id}`)
+            console.log("response create library item: ", res)
+            navigate("/");
         } catch (error) {
-            console.log("the new item was not submitted")
+            console.log("the new library item was not submitted")
         }
+    }
+
+    const createNewCategory = async (categoryInput) => {
+
+        let newCategoryObj = [{
+            categoryName: categoryInput
+        }]
+
+        console.log("Add new category object body: ", newCategoryObj)
+
+        let newCat = []
+        try {
+            let res = await fetch("http://localhost:4000/rest/category/add", {
+                method: "POST",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify(newCategoryObj)
+            });
+            res = await res.json();
+            newCat = res
+            console.log("response create category: ", res)
+            navigate("/");
+        } catch (error) {
+            console.log("the new category item was not submitted")
+        }
+
+        return newCat
     }
 
     return (
         <div>
 
-            <h1>Create library item</h1>
+            <h1>Create product</h1>
 
-            <form onSubmit={handleFormSubmit}>
+            <form onSubmit={handleSubmit}>
                 <div>
-                    <label>Type</label>
+                    <label>Type of media</label>
                     <input
-                        type="type"
+                        type="text"
+                        name="type"
+                        id="type"
                         onChange={(e) => {
                             setItemData((prev) => ({ ...prev, type: e.target.value }))
                         }}
@@ -83,19 +125,11 @@ export default function CreateLibraryItemForm() {
                     ></input>
                 </div>
                 <div>
-                    <label>Category</label>
-                    <input
-                        type="category"
-                        onChange={(e) => {
-                            setItemData((prev) => ({ ...prev, category: e.target.value }))
-                        }}
-
-                    ></input>
-                </div>
-                <div>
                     <label>Title</label>
                     <input
-                        type="title"
+                        type="text"
+                        name="title"
+                        id="title"
                         onChange={(e) => {
                             setItemData((prev) => ({ ...prev, title: e.target.value }))
                         }}
@@ -105,17 +139,39 @@ export default function CreateLibraryItemForm() {
                 <div>
                     <label>Author</label>
                     <input
-                        type="author"
+                        type="text"
+                        name="author"
+                        id="author"
                         onChange={(e) => {
                             setItemData((prev) => ({ ...prev, author: e.target.value }))
                         }}
 
                     ></input>
                 </div>
+                {/* Category input */}
+                <div>
+                    <label htmlFor="category">
+                        Category*
+                    </label>
+                    <div>
+                        <select
+                            id="categoryName"
+                            name="categoryName"
+                            onChange={(e) => {
+                                setItemData((prev) => ({ ...prev, categoryName: e.target.value }));
+                            }}
+                            required
+                        >
+                            {categories.map((cat) => <option value={cat.categoryName} key={cat.id}>{cat.categoryName}</option>)}
+                        </select>
+                    </div>
+                </div>
                 <div>
                     <label>Pages</label>
                     <input
-                        type="pages"
+                        type="number"
+                        name="pages"
+                        id="pages"
                         onChange={(e) => {
                             setItemData((prev) => ({ ...prev, pages: e.target.value }))
                         }}
@@ -125,7 +181,9 @@ export default function CreateLibraryItemForm() {
                 <div>
                     <label>Run time minutes</label>
                     <input
-                        type="runTimeMinutes"
+                        type="number"
+                        name="runTimeMinutes"
+                        id="runTimeMinutes"
                         onChange={(e) => {
                             setItemData((prev) => ({ ...prev, runTimeMinutes: e.target.value }))
                         }}
@@ -135,7 +193,7 @@ export default function CreateLibraryItemForm() {
                 <div>
                     <button
                         type="submit"
-                        className="group relative w-1/2 flex justify-center py-2 px-4 border border-transparent text-base font-medium rounded-md text-white bg-myPr-dark hover:bg-myPr-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        className="btnSubmit"
                     >
                         Submit
                     </button>
