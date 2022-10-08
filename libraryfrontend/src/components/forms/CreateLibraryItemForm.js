@@ -1,9 +1,13 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function CreateLibraryItemForm({ categories }) {
 
     const navigate = useNavigate()
+
+    const [allCategories, setAllCategories] = useState(categories)
+    const [boolean, setBoolean] = useState(false)
+    const [disableBtn, setDisableBtn] = useState(false)
 
     //dynamically gathers input values into an object which will be passed on submit
     const [itemData, setItemData] = useState({
@@ -18,7 +22,12 @@ export default function CreateLibraryItemForm({ categories }) {
     console.log(itemData)
 
 
+
     const handleSubmit = async (e) => {
+
+
+
+
 
         e.preventDefault()
 
@@ -26,19 +35,15 @@ export default function CreateLibraryItemForm({ categories }) {
 
         let catId = ""
 
-        console.log(categories.some(obj => item.categoryName === obj.categoryName))
-
-        if (categories.some(obj => item.categoryName === obj.categoryName)) {
-            categories.forEach((obj) => { //get the id of the chosen category
+        if (allCategories.some(obj => item.categoryName === obj.categoryName)) {
+            console.log("debug------1")
+            allCategories.forEach((obj) => { //get the id of the chosen category
                 if (item.categoryName === obj.categoryName) {
                     console.log("--------foreach categorie: ", item.categoryName, obj.categoryName)
                     catId = obj.id
                     return;
                 }
             });
-        } else {
-            let newCat = createNewCategory(item.categoryName)
-            catId = newCat.id
         }
 
 
@@ -80,15 +85,14 @@ export default function CreateLibraryItemForm({ categories }) {
         }
     }
 
-    const createNewCategory = async (categoryInput) => {
+    const createNewCategory = async () => {
 
-        let newCategoryObj = [{
-            categoryName: categoryInput
-        }]
+        let newCategoryObj = {
+            categoryName: itemData.categoryName
+        }
 
         console.log("Add new category object body: ", newCategoryObj)
 
-        let newCat = []
         try {
             let res = await fetch("http://localhost:4000/rest/category/add", {
                 method: "POST",
@@ -96,14 +100,23 @@ export default function CreateLibraryItemForm({ categories }) {
                 body: JSON.stringify(newCategoryObj)
             });
             res = await res.json();
-            newCat = res
             console.log("response create category: ", res)
-            navigate("/");
         } catch (error) {
             console.log("the new category item was not submitted")
         }
 
-        return newCat
+        let resFetchAllCategories = await fetch("http://localhost:4000/rest/category/all");
+
+        try {
+            resFetchAllCategories = await resFetchAllCategories.json();
+            if (resFetchAllCategories) {
+                console.log("-----resFetchAllCategories: ", resFetchAllCategories)
+                setAllCategories(resFetchAllCategories)
+            }
+        } catch (error) {
+            console.log("couldn't fetch all categories")
+        }
+
     }
 
     return (
@@ -153,18 +166,30 @@ export default function CreateLibraryItemForm({ categories }) {
                     <label htmlFor="category">
                         Category*
                     </label>
-                    <div>
-                        <select
-                            id="categoryName"
-                            name="categoryName"
-                            onChange={(e) => {
-                                setItemData((prev) => ({ ...prev, categoryName: e.target.value }));
-                            }}
-                            required
-                        >
-                            {categories.map((cat) => <option value={cat.categoryName} key={cat.id}>{cat.categoryName}</option>)}
-                        </select>
+                    <button type="button" onClick={(e) => { boolean ? setBoolean(false) : setBoolean(true) }}>Other...</button>
+                    {boolean ? <div><input
+                        type="text"
+                        name="categoryName"
+                        id="categoryName"
+                        onChange={(e) => {
+                            setItemData((prev) => ({ ...prev, categoryName: e.target.value }))
+                        }}
+
+                    ></input>
+                        <button type="button" onClick={createNewCategory}>Create category</button>
                     </div>
+                        : <div>
+                            <select
+                                id="categoryName"
+                                name="categoryName"
+                                onChange={(e) => {
+                                    setItemData((prev) => ({ ...prev, categoryName: e.target.value }));
+                                }}
+                                required
+                            >
+                                {allCategories.map((cat) => <option value={cat.categoryName} key={cat.id}>{cat.categoryName}</option>)}
+                            </select>
+                        </div>}
                 </div>
                 <div>
                     <label>Pages</label>
