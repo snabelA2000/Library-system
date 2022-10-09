@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +44,12 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
+    public Collection<Employee> readManagers(){
+
+        return employeeRepository.findAllManagers();
+
+    }
+
     @Transactional
     public String updateEmployee(Employee employee){
         if (employeeRepository.existsById(employee.getId())){
@@ -51,7 +58,7 @@ public class EmployeeService {
                     employeeToBeUpdate.setFirstName(employee.getFirstName());
                     employeeToBeUpdate.setLastName(employee.getLastName());
                     employeeToBeUpdate.setSalary(employee.getSalary());
-                    employeeToBeUpdate.setIsCEO(employee.getIsCEO());
+                    employeeToBeUpdate.setIsCeo(employee.getIsCeo());
                     employeeToBeUpdate.setIsManager(employee.getIsManager());
                     employeeToBeUpdate.setManagerId(employee.getManagerId());
                     System.out.println("----service UPDATE employee: " + employeeToBeUpdate);

@@ -1,32 +1,40 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function CreateEmployeeForm() {
+export default function CreateEmployeeForm({manager, setHideManagerListing}) {
 
     const navigate = useNavigate()
+
+    console.log("manager", manager)
 
     //dynamically gathers input values into an object which will be passed on submit
     const [employeeData, setEmployeeData] = useState({
         firstName: "",
         lastName: "",
-        isCEO: false,
+        isCeo: "false",
         isManager: false,
-        salary: ""
+        salary: null,
+        managerId: null
     });
 
-    const handleSubmit = async (e, value) => {
+    console.log("employeeData", employeeData)
 
-        console.log("employeeData: ", employeeData)
+    useEffect(() => {
+        setEmployeeData((prev) => ({ ...prev, managerId: manager.id }))
+    }, [manager])
+
+    const handleSubmit = async (e) => {
+
         e.preventDefault()
 
         //POST json body object
         let newEmployee = {
             firstName: employeeData.firstName,
             lastName: employeeData.lastName,
-            isCEO: employeeData.isCEO,
-            isManager: employeeData.isManager,
+            isCeo: employeeData.isCeo,
+            isManager: employeeData.isManager.toString(),
             salary: employeeData.salary,
-            managerId: null
+            managerId: manager.id
         }
 
         console.log("jsonobject: ", JSON.stringify(newEmployee))
@@ -37,9 +45,12 @@ export default function CreateEmployeeForm() {
                 headers: { "content-type": "application/json" },
                 body: JSON.stringify(newEmployee)
             });
-            res = await res.json();
-            console.log("response create employee: ", res)
-            navigate("/");
+            if (res.ok) {
+                alert("Employee was successfully created")
+            } else {
+                alert("Something went wrong, try again")
+            }
+            navigate("/manage-employees");
         } catch (error) {
             console.log("the new item was not submitted")
         }
@@ -61,7 +72,7 @@ export default function CreateEmployeeForm() {
                         onChange={(e) => {
                             setEmployeeData((prev) => ({ ...prev, firstName: e.target.value }))
                         }}
-
+                        required
                     ></input>
                 </div>
                 <div>
@@ -73,45 +84,37 @@ export default function CreateEmployeeForm() {
                         onChange={(e) => {
                             setEmployeeData((prev) => ({ ...prev, lastName: e.target.value }))
                         }}
-
+                        required
                     ></input>
                 </div>
                 <div>
-                    <label>CEO</label>
-                    <input
-                        type="text"
-                        name="isCEO"
-                        id="isCEO"
-                        onChange={(e) => {
-                            setEmployeeData((prev) => ({ ...prev, isCEO: e.target.value }))
-                        }}
-
-                    ></input>
-                </div>
-                <div>
-                    <label>Manager</label>
-                    <input
-                        type="text"
-                        name="isManager"
-                        id="isManager"
-                        onChange={(e) => {
-                            setEmployeeData((prev) => ({ ...prev, isManager: e.target.value }))
-                        }}
-
-                    ></input>
-                </div>
-                <div>
-                    <label>Salary</label>
+                    <label>Rank (1-10)</label>
                     <input
                         type="number"
                         name="salary"
                         id="salary"
+                        min="1"
+                        max="10"
                         onChange={(e) => {
                             setEmployeeData((prev) => ({ ...prev, salary: e.target.value }))
                         }}
-
+                        required
                     ></input>
                 </div>
+                <div>
+                    <label>Role</label>
+                    <input
+                        type="checkbox"
+                        name="isManager"
+                        id="isManager"
+                        onChange={(e) => {
+                            setEmployeeData((prev) => ({ ...prev, isManager: !employeeData.isManager }))
+                            setHideManagerListing(current => !current)
+                        }}
+                        required
+                    ></input>
+                </div>
+                {employeeData.isManager ? <br></br> : <h4>Manager: {manager.firstName} {manager.lastName}</h4>}
                 <div>
                     <button
                         type="submit"

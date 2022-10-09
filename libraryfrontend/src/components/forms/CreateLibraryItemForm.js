@@ -78,8 +78,11 @@ export default function CreateLibraryItemForm({ categories }) {
                 headers: { "content-type": "application/json" },
                 body: JSON.stringify(newLibraryItem)
             });
-            res = await res.json();
-            console.log("response create library item: ", res)
+            if(res.ok){
+                alert("Product was successfully created")
+            }else{
+                alert("Something went wrong, try again")
+            }
             navigate("/");
         } catch (error) {
             console.log("the new library item was not submitted")
@@ -136,6 +139,7 @@ export default function CreateLibraryItemForm({ categories }) {
                         required
                     >
                         {mediaTypes.map((type) => <option value={type.mediaType} key={type.id}>{type.mediaType}</option>)}
+                        required
                     </select>
                 </div>
                 <div>
@@ -147,7 +151,7 @@ export default function CreateLibraryItemForm({ categories }) {
                         onChange={(e) => {
                             setItemData((prev) => ({ ...prev, title: e.target.value }))
                         }}
-
+                        required
                     ></input>
                 </div>
                 <div>
@@ -159,7 +163,7 @@ export default function CreateLibraryItemForm({ categories }) {
                         onChange={(e) => {
                             setItemData((prev) => ({ ...prev, author: e.target.value }))
                         }}
-
+                        required
                     ></input>
                 </div>
                 {/* Category input */}

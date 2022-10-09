@@ -53,12 +53,12 @@ public class Employee {
         this.salary = salary;
     }
 
-    public String getIsCEO() {
+    public String getIsCeo() {
         return isCeo;
     }
 
-    public void setIsCEO(String isCeo) {
-        this.isCeo = Employee.this.isCeo;
+    public void setIsCeo(String isCeo) {
+        this.isCeo = isCeo;
     }
 
     public String getIsManager() {

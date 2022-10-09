@@ -20,7 +20,7 @@ export const Home = () => {
     return (
         <div>
             <div>
-                <button><Link to={"/create-library-item"}>createLibraryItem</Link></button>
+                <button type="button"><Link to={"/create-library-item"}>createLibraryItem</Link></button>
             </div>
             <LibraryItemListing libraryItems={libraryItems} />
         </div>

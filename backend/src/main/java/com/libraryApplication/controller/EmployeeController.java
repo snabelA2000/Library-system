@@ -5,6 +5,7 @@ import com.libraryApplication.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +32,11 @@ public class EmployeeController {
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public List<Employee> readEmployees(){
         return employeeService.readEmployees();
+    }
+
+    @RequestMapping(value = "/managers", method = RequestMethod.GET)
+    public Collection<Employee> readManagers(){
+        return employeeService.readManagers();
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)

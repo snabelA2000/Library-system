@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-
+import { Link } from "react-router-dom";
 import { EmployeeListing } from "../components/lists/EmployeeListing"
+import "../styling/pages.css"
 
 export const ManageEmployees = () => {
 
@@ -16,7 +17,8 @@ export const ManageEmployees = () => {
     }, [])
 
     return (
-        <div>
+        <div className="flex-center">
+            <button className="btn-create-employee" type="button"><Link to={"/manage-employees/create-employee"}>Create Employee</Link></button>
             <EmployeeListing employees={employees} />
         </div>
     )

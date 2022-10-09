@@ -41,8 +41,6 @@ export const EmployeeDetails = () => {
             managerId: employeeDataInput.managerId
         }
 
-        console.log("jsonobject: ", JSON.stringify(updateEmployee))
-
         try {
             await fetch("http://localhost:4000/rest/employee/update", {
                 method: "PUT",
@@ -109,10 +107,10 @@ export const EmployeeDetails = () => {
                     <input
                         placeholder={employee.isCEO}
                         type="checkbox"
-                        name="isCEO"
-                        id="isCEO"
+                        name="isCeo"
+                        id="isCeo"
                         onChange={(e) => {
-                            setEmployeeDataInput((prev) => ({ ...prev, isCEO: e.target.checked }))
+                            setEmployeeDataInput((prev) => ({ ...prev, isCeo: e.target.checked }))
                         }}
 
                     ></input>
