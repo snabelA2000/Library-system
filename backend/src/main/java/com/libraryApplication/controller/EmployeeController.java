@@ -23,6 +23,11 @@ public class EmployeeController {
 
     //endpoints
 
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public Optional<Employee> getEmployeeById(@PathVariable Integer id){
+        return employeeService.getById(id);
+    }
+
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public List<Employee> readEmployees(){
         return employeeService.readEmployees();
@@ -39,8 +44,8 @@ public class EmployeeController {
         return employeeService.updateEmployee(employee);
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public String deleteEmployee(@RequestBody Employee employee){
-        return employeeService.deleteEmployee(employee);
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    public String deleteEmployeeById(@PathVariable Integer id){
+        return employeeService.deleteEmployeeById(id);
     }
 }

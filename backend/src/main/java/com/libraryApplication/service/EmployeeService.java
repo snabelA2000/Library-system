@@ -26,7 +26,7 @@ public class EmployeeService {
     @Transactional
     public String createEmployee(Employee employee){
         try {
-            if (!employeeRepository.existsByLastName(employee.getLastName())){
+            if (!employeeRepository.existsById(employee.getId())){
                 employee.setId(null == employeeRepository.findMaxId()? 0 : employeeRepository.findMaxId() + 1);
                 System.out.println("-----service createEmployee: " + employee);
                 employeeRepository.save(employee);
@@ -45,18 +45,20 @@ public class EmployeeService {
 
     @Transactional
     public String updateEmployee(Employee employee){
-        if (employeeRepository.existsByLastName(employee.getLastName())){
+        if (employeeRepository.existsById(employee.getId())){
             try {
-                List<Employee> employees = employeeRepository.findByLastName(employee.getLastName());
-                employees.stream().forEach(s -> {
-                    Employee employeeToBeUpdate = employeeRepository.findById(s.getId()).get();
+                    Employee employeeToBeUpdate = employeeRepository.findById(employee.getId()).get();
                     employeeToBeUpdate.setFirstName(employee.getFirstName());
                     employeeToBeUpdate.setLastName(employee.getLastName());
+                    employeeToBeUpdate.setSalary(employee.getSalary());
+                    employeeToBeUpdate.setIsCEO(employee.getIsCEO());
+                    employeeToBeUpdate.setIsManager(employee.getIsManager());
+                    employeeToBeUpdate.setManagerId(employee.getManagerId());
+                    System.out.println("----service UPDATE employee: " + employeeToBeUpdate);
                     employeeRepository.save(employeeToBeUpdate);
-                });
                 return "Employee record updated.";
-            }catch (Exception e){
-                throw e;
+            }catch (Exception ex){
+                throw ex;
             }
         }else {
             return "Employee does not exists in the database.";
@@ -64,18 +66,15 @@ public class EmployeeService {
     }
 
     @Transactional
-    public String deleteEmployee(Employee employee){
-        if (employeeRepository.existsByLastName(employee.getLastName())){
+    public String deleteEmployeeById(Integer id){
+        if (employeeRepository.existsById(id)){
             try {
-                List<Employee> employees = employeeRepository.findByLastName(employee.getLastName());
-                employees.stream().forEach(s -> {
-                    employeeRepository.delete(s);
-                });
+                Employee employeeToDelete = employeeRepository.findById(id).get();
+                employeeRepository.delete(employeeToDelete);
                 return "Employee record deleted successfully.";
             }catch (Exception e){
                 throw e;
             }
-
         }else {
             return "Employee does not exist";
         }

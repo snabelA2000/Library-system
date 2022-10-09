@@ -14,8 +14,8 @@ public class Employee {
     private String firstName;
     private String lastName;
     private Integer salary;
-    private boolean isCEO;
-    private boolean isManager;
+    private String isCeo;
+    private String isManager;
     private Integer managerId;
 
     public Employee() {
@@ -53,20 +53,20 @@ public class Employee {
         this.salary = salary;
     }
 
-    public boolean isCEO() {
-        return isCEO;
+    public String getIsCEO() {
+        return isCeo;
     }
 
-    public void setCEO(boolean CEO) {
-        isCEO = CEO;
+    public void setIsCEO(String isCeo) {
+        this.isCeo = Employee.this.isCeo;
     }
 
-    public boolean isManager() {
+    public String getIsManager() {
         return isManager;
     }
 
-    public void setManager(boolean manager) {
-        isManager = manager;
+    public void setIsManager(String isManager) {
+        this.isManager = isManager;
     }
 
     public Integer getManagerId() {
@@ -75,5 +75,18 @@ public class Employee {
 
     public void setManagerId(Integer managerId) {
         this.managerId = managerId;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", salary=" + salary +
+                ", isCeo='" + isCeo + '\'' +
+                ", isManager='" + isManager + '\'' +
+                ", managerId=" + managerId +
+                '}';
     }
 }

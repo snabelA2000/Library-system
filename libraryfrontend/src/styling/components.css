@@ -1,7 +1,21 @@
 
 /* List */
 .listContainer {
-    padding: 2px 16px;
+    padding: 16px 0 16px;
+}
+
+/* Forms */
+form {
+    width: 350px;
+}
+
+form > div {
+    padding: 30px 0 30px;
+}
+
+form > div > * {
+    height: 30px;
+    width: 100%;
 }
 
 
@@ -26,5 +40,5 @@
 }
 
 .cardContainer > div > div > * {
-    padding: 4px;
+    padding: 0 4px 0;
 }

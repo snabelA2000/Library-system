@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import '../../styling/components.css'
 
 export default function CreateLibraryItemForm({ categories }) {
 
@@ -11,47 +12,45 @@ export default function CreateLibraryItemForm({ categories }) {
 
     //dynamically gathers input values into an object which will be passed on submit
     const [itemData, setItemData] = useState({
-        type: "",
+        mediaType: "",
         title: "",
         author: "",
         pages: null,
         runTimeMinutes: null,
-        categoryName: ""
+        categoryName: "",
+        isBorrowable: true
     });
 
-    console.log(itemData)
+    const mediaTypes = [
+        { id: 1, name: "Choose", value: "" },
+        { id: 2, name: "Book", value: "Book" },
+        { id: 3, name: "Reference Book", value: "Reference Book" },
+        { id: 4, name: "DVD", value: "DVD" },
+        { id: 5, name: "Audio Book", value: "Audio Book not borrowable" }
+      ]
 
-
-
-    const handleSubmit = async (e) => {
-
-
-
-
+    const handleSubmit = (e) => {
 
         e.preventDefault()
 
         let item = itemData;
 
         let catId = ""
-
         if (allCategories.some(obj => item.categoryName === obj.categoryName)) {
-            console.log("debug------1")
             allCategories.forEach((obj) => { //get the id of the chosen category
                 if (item.categoryName === obj.categoryName) {
-                    console.log("--------foreach categorie: ", item.categoryName, obj.categoryName)
                     catId = obj.id
                     return;
                 }
             });
         }
+        console.log("----found catId: ", catId)
 
+        if(item.mediaType === 'Reference Book'){
+            item.isBorrowable = false
+        }
 
-
-        console.log("----catId: ", catId)
-
-
-        //POST object
+        //POST Body
         let newLibraryItem = {
             title: item.title,
             author: item.author,
@@ -60,17 +59,19 @@ export default function CreateLibraryItemForm({ categories }) {
                 id: catId,
                 categoryName: item.categoryName,
             },
-            isBorrowable: true,
+            isBorrowable: item.isBorrowable,
             borrowDate: null,
             borrower: null,
             runTimeMinutes: item.runTimeMinutes,
-            type: item.type
+            type: item.mediaType
         }
 
-        console.log("jsonobject: ", JSON.stringify(newLibraryItem))
+        console.log("jsonobject: ", newLibraryItem)
 
+        createLibraryItem(newLibraryItem)
+    }
 
-
+    const createLibraryItem = async (newLibraryItem) => {
         try {
             let res = await fetch("http://localhost:4000/rest/libraryItem/add", {
                 method: "POST",
@@ -126,16 +127,16 @@ export default function CreateLibraryItemForm({ categories }) {
 
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label>Type of media</label>
-                    <input
-                        type="text"
-                        name="type"
-                        id="type"
+                    <select
+                        id="mediaType"
+                        name="mediaType"
                         onChange={(e) => {
-                            setItemData((prev) => ({ ...prev, type: e.target.value }))
+                            setItemData((prev) => ({ ...prev, mediaType: e.target.value }));
                         }}
-
-                    ></input>
+                        required
+                    >
+                        {mediaTypes.map((type) => <option value={type.mediaType} key={type.id}>{type.mediaType}</option>)}
+                    </select>
                 </div>
                 <div>
                     <label>Title</label>
