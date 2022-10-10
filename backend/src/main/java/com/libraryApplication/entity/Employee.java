@@ -13,7 +13,7 @@ public class Employee {
     private int id;
     private String firstName;
     private String lastName;
-    private Integer salary;
+    private double salary;
     private String isCeo;
     private String isManager;
     private Integer managerId;
@@ -45,11 +45,11 @@ public class Employee {
         this.lastName = lastName;
     }
 
-    public Integer getSalary() {
+    public double getSalary() {
         return salary;
     }
 
-    public void setSalary(Integer salary) {
+    public void setSalary(double salary) {
         this.salary = salary;
     }
 

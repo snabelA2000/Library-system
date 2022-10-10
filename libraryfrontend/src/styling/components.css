@@ -2,6 +2,8 @@
 /* List */
 .listContainer {
     padding: 16px 0 16px;
+    max-width: 600px;
+    min-width: 200px;
 }
 
 /* Forms */

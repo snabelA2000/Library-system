@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -29,9 +30,25 @@ public class EmployeeService {
         try {
             if (!employeeRepository.existsById(employee.getId())){
                 employee.setId(null == employeeRepository.findMaxId()? 0 : employeeRepository.findMaxId() + 1);
+
+                double calculatedSalary;
+                double salaryRank = employee.getSalary();
+                
+                if(Objects.equals(employee.getIsCeo(), "true")){
+                    calculatedSalary = salaryRank * 2.725;
+
+                }else if(Objects.equals(employee.getIsManager(), "true")){
+                    calculatedSalary = salaryRank * 1.725;
+
+                }else{
+                    calculatedSalary = salaryRank * 1.125;
+                }
+                employee.setSalary(calculatedSalary);
+
                 System.out.println("-----service createEmployee: " + employee);
                 employeeRepository.save(employee);
                 return "Employee record created successfully.";
+
             }else {
                 return "Employee already exists in the database.";
             }
@@ -45,9 +62,15 @@ public class EmployeeService {
     }
 
     public Collection<Employee> readManagers(){
-
         return employeeRepository.findAllManagers();
+    }
 
+    public Collection<Employee> readRegularEmployees(){
+        return employeeRepository.findAllRegularEmployees();
+    }
+
+    public Optional<Employee> readCeo(){
+        return employeeRepository.findCeo();
     }
 
     @Transactional

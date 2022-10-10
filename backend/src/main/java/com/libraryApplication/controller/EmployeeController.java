@@ -39,6 +39,16 @@ public class EmployeeController {
         return employeeService.readManagers();
     }
 
+    @RequestMapping(value = "/regularEmployees", method = RequestMethod.GET)
+    public Collection<Employee> readRegularEmployees(){
+        return employeeService.readRegularEmployees();
+    }
+
+    @RequestMapping(value = "/ceo", method = RequestMethod.GET)
+    public Optional<Employee> readCeo(){
+        return employeeService.readCeo();
+    }
+
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String createEmployee(@RequestBody Employee employee){
         System.out.println("Requestbody employee: " + employee);
