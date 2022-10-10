@@ -7,7 +7,7 @@ export const EmployeeCard = ({ employee }) => {
 
     const goToEmployeeDetails = () => {
         navigate(`/manage-employees/employee-details/${employee.id}`);
-      };
+    };
 
     return (
         <div className="card">
@@ -15,7 +15,9 @@ export const EmployeeCard = ({ employee }) => {
                 <div className="flexed-left">
                     <div>
                         <div>
-                            {employee.ceo ? <h3>CEO</h3> : <br></br>}
+                            {employee.isCeo === "true" ? <h5>CEO</h5> : <br></br>}
+                            {employee.isManager === "true" ? <h5>Manager</h5> : <br></br>}
+
                             <h5>Employee ID: {employee.id}</h5>
                             <h3>{employee.firstName} {employee.lastName}</h3>
                         </div>

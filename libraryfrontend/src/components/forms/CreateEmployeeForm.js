@@ -111,7 +111,6 @@ export default function CreateEmployeeForm({manager, setHideManagerListing}) {
                             setEmployeeData((prev) => ({ ...prev, isManager: !employeeData.isManager }))
                             setHideManagerListing(current => !current)
                         }}
-                        required
                     ></input>
                 </div>
                 {employeeData.isManager ? <br></br> : <h4>Manager: {manager.firstName} {manager.lastName}</h4>}

@@ -33,7 +33,7 @@ public class EmployeeService {
 
                 double calculatedSalary;
                 double salaryRank = employee.getSalary();
-                
+
                 if(Objects.equals(employee.getIsCeo(), "true")){
                     calculatedSalary = salaryRank * 2.725;
 
@@ -80,7 +80,21 @@ public class EmployeeService {
                     Employee employeeToBeUpdate = employeeRepository.findById(employee.getId()).get();
                     employeeToBeUpdate.setFirstName(employee.getFirstName());
                     employeeToBeUpdate.setLastName(employee.getLastName());
-                    employeeToBeUpdate.setSalary(employee.getSalary());
+
+                    double calculatedSalary;
+                    double salaryRank = employee.getSalary();
+
+                    if(Objects.equals(employee.getIsCeo(), "true")){
+                        calculatedSalary = salaryRank * 2.725;
+
+                    }else if(Objects.equals(employee.getIsManager(), "true")){
+                        calculatedSalary = salaryRank * 1.725;
+
+                    }else{
+                        calculatedSalary = salaryRank * 1.125;
+                    }
+                    employeeToBeUpdate.setSalary(calculatedSalary);
+
                     employeeToBeUpdate.setIsCeo(employee.getIsCeo());
                     employeeToBeUpdate.setIsManager(employee.getIsManager());
                     employeeToBeUpdate.setManagerId(employee.getManagerId());

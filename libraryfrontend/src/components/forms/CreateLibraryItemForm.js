@@ -8,7 +8,6 @@ export default function CreateLibraryItemForm({ categories }) {
 
     const [allCategories, setAllCategories] = useState(categories)
     const [boolean, setBoolean] = useState(false)
-    const [disableBtn, setDisableBtn] = useState(false)
 
     //dynamically gathers input values into an object which will be passed on submit
     const [itemData, setItemData] = useState({
@@ -26,7 +25,7 @@ export default function CreateLibraryItemForm({ categories }) {
         { id: 2, name: "Book", value: "Book" },
         { id: 3, name: "Reference Book", value: "Reference Book" },
         { id: 4, name: "DVD", value: "DVD" },
-        { id: 5, name: "Audio Book", value: "Audio Book not borrowable" }
+        { id: 5, name: "Audio Book", value: "Audio Book" }
       ]
 
     const handleSubmit = (e) => {
@@ -130,6 +129,7 @@ export default function CreateLibraryItemForm({ categories }) {
 
             <form onSubmit={handleSubmit}>
                 <div>
+                    <label>Type</label>
                     <select
                         id="mediaType"
                         name="mediaType"
@@ -138,7 +138,7 @@ export default function CreateLibraryItemForm({ categories }) {
                         }}
                         required
                     >
-                        {mediaTypes.map((type) => <option value={type.mediaType} key={type.id}>{type.mediaType}</option>)}
+                        {mediaTypes.map((type) => <option value={type.name} key={type.id}>{type.name}</option>)}
                         required
                     </select>
                 </div>

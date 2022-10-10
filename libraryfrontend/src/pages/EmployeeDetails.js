@@ -3,24 +3,22 @@ import "../styling/pages.css"
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ManagerListing } from "../components/lists/ManagerListing";
 
 export const EmployeeDetails = () => {
 
-    const [managers, setManagers] = useState([])
     const [manager, setManager] = useState([])
-    const [hideManagerListing, setHideManagerListing] = useState(false)
 
     const navigate = useNavigate()
     const { id } = useParams();
     const [employee, setEmployee] = useState([])
 
+
     //dynamically gathers input values into an object which will be passed on submit
     const [employeeDataInput, setEmployeeDataInput] = useState({
         firstName: employee.firstName,
         lastName: employee.lastName,
-        isCeo: false,
-        isManager: false,
+        isCeo: employee.isCeo,
+        isManager: employee.isManager,
         managerId: null
     });
 
@@ -29,9 +27,6 @@ export const EmployeeDetails = () => {
         res = await res.json()
         console.log(" res get employee by id: ", res)
         setEmployee(res)
-        if (res.isManager === 'true') {
-            setHideManagerListing(true)
-        }
     }
 
     const handleSubmit = async (e) => {
@@ -45,8 +40,8 @@ export const EmployeeDetails = () => {
             id: id,
             firstName: employeeDataInput.firstName,
             lastName: employeeDataInput.lastName,
-            isCeo: employeeDataInput.isCeo.toString(),
-            isManager: employeeDataInput.isManager.toString(),
+            isCeo: employee.isCeo.toString(),
+            isManager: employee.isManager.toString(),
             salary: employee.salary,
             managerId: manager.id
         }
@@ -82,7 +77,6 @@ export const EmployeeDetails = () => {
             .then(res => res.json())
             .then((result) => {
                 console.log("result", result)
-                setManagers(result);
                 if (employee.isManager !== 'true' && result.some(man => employee.managerId === man.id)) {
                     result.forEach((man) => { //get the id of the chosen category
                         if (employee.managerId === man.id) {
@@ -96,8 +90,6 @@ export const EmployeeDetails = () => {
             })
     }, [employee])
 
-    console.log("employeeDataInput", employeeDataInput)
-
     useEffect(() => {
         setEmployeeDataInput((prev) => ({ ...prev, managerId: manager.id }))
 
@@ -106,6 +98,9 @@ export const EmployeeDetails = () => {
     useEffect(() => {
         setEmployeeDataInput((prev) => ({ ...prev, firstName: employee.firstName }))
         setEmployeeDataInput((prev) => ({ ...prev, lastName: employee.lastName }))
+        setEmployeeDataInput((prev) => ({ ...prev, isManager: employee.isManager }))
+        setEmployeeDataInput((prev) => ({ ...prev, isCeo: employee.isCeo }))
+        console.log(employee)
     }, [employee])
 
     useEffect(() => {
@@ -145,41 +140,6 @@ export const EmployeeDetails = () => {
                         ></input>
                     </div>
                     <div>
-                        <label>CEO</label>
-                        <input
-                            placeholder={employee.isCEO}
-                            type="checkbox"
-                            name="isCeo"
-                            id="isCeo"
-                            onChange={(e) => {
-                                setEmployeeDataInput((prev) => ({ ...prev, isCeo: e.target.checked }))
-                            }}
-
-                        ></input>
-                    </div>
-                    <div>
-                        <label>Manager</label>
-                        {employee.isManager === 'true' ?
-                            <input type="checkbox" checked="checked" onClick={(e) => {
-                                setEmployee((prev) => ({ ...prev, isManager: !employee.isManager }))
-                                setHideManagerListing(current => !current)
-                            }}
-                            ></input>
-                            :
-                            <input
-                                type="checkbox"
-                                name="isManager"
-                                id="isManager"
-                                onChange={(e) => {
-                                    setEmployeeDataInput((prev) => ({ ...prev, isManager: !employeeDataInput.isManager }))
-                                    setHideManagerListing(current => !current)
-                                }}
-
-                            ></input>}
-                    </div>
-                    {employeeDataInput.isManager ? <br></br> : <h4>Manager: {manager.firstName} {manager.lastName} (ID: {manager.id})</h4>}
-
-                    <div>
                         <button
                             type="submit"
                             className="btnSubmit"
@@ -192,13 +152,7 @@ export const EmployeeDetails = () => {
                     <button type="button" onClick={handleOnClickDelete}>Delete</button>
                 </div>
             </div>
-            <div>
-                {hideManagerListing ? <br></br> :
-                    <div>
-                        <h4>Change manager</h4>
-                        <ManagerListing managers={managers} setManager={setManager} />
-                    </div>}
-            </div>
+
         </div >
     )
 

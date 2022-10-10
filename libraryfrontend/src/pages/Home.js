@@ -7,6 +7,7 @@ import { LibraryItemListing } from "../components/lists/LibraryItemListing"
 export const Home = () => {
 
     const [libraryItems, setLibraryItems] = useState([])
+    const [isBorrowed, setIsBorrowed] = useState(false)
 
     useEffect(() => {
         fetch("http://localhost:4000/rest/libraryItem/all")
@@ -22,7 +23,7 @@ export const Home = () => {
             <div>
                 <button type="button"><Link to={"/create-library-item"}>createLibraryItem</Link></button>
             </div>
-            <LibraryItemListing libraryItems={libraryItems} />
+            <LibraryItemListing libraryItems={libraryItems} setIsBorrowed={setIsBorrowed}/>
         </div>
     )
 }

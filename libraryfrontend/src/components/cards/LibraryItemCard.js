@@ -1,11 +1,15 @@
 
 import "../../styling/components.css"
 
-export const LibraryItemCard = ({ libraryItem }) => {
+export const LibraryItemCard = ({ libraryItem, setIsBorrowed }) => {
 
     let item = libraryItem
+
+    const handleClick = () => {
+        setIsBorrowed(true)
+    }
     return (
-        <div className="card">
+        <div className="card" onClick={handleClick}>
             <div className="cardContainer">
                 <div className="flexed-left">
                     <div>
